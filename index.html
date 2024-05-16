@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WhatsApp-like Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body style="display: flex; flex-direction: column; align-content: center;">
+    <form id="loginForm" >
+        <h1>LOGIN FORM</h1>
+        <input id="userId" placeholder="Enter your user ID">
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="chatArea" style="display: none;">
+        <h1>CHAT APPLICATION</h1>
+        <input id="recipientId" placeholder="Enter recipient's user ID">
+        <input id="messageInput" autocomplete="off">
+        <button id="sendMessage">Send</button>
+    </div>
+
+    <!-- Separate table for displaying messages -->
+    <h1>MESSAGE TABLE</h1>
+
+    <div id="messageTableDiv">
+        <table id="messageTable">
+            <thead>
+                <tr>
+                    <th>Users</th>
+                    <th>Message from User</th>
+                </tr>
+            </thead>
+            <tbody id="messages">
+                <!-- Table rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io();
+            const loginForm = document.getElementById('loginForm');
+            const chatArea = document.getElementById('chatArea');
+            const messagesList = document.getElementById('messages');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userId = document.getElementById('userId').value.trim();
+
+                // Send the user ID to the server for login
+                socket.emit('login', userId);
+            });
+
+            socket.on('login success', () => {
+                console.log('Login successful');
+                loginForm.style.display = 'none';
+                chatArea.style.display = 'flex';
+            });
+
+            document.getElementById('sendMessage').addEventListener('click', () => {
+                const to = document.getElementById('recipientId').value.trim();
+                const message = document.getElementById('messageInput').value.trim();
+
+                // Send the private message to the server
+                socket.emit('private message', { to, message });
+
+                // Display the message in the sender's message list with user ID
+                const userId = document.getElementById('userId').value.trim();
+
+                const table = document.getElementById('messageTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                const cell1 = newRow.insertCell(0);
+                const cell2 = newRow.insertCell(1);
+                cell1.textContent = userId;
+                cell2.textContent = message;
+
+                document.getElementById('messageInput').value = '';
+            });
+
+            socket.on('private message', ({ userId, message }) => {
+                // Display the received message with sender's user ID
+                const table = document.getElementById('messageTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                const cell1 = newRow.insertCell(0);
+                const cell2 = newRow.insertCell(1);
+                cell1.textContent = userId;
+                cell2.textContent = message;
+            });
+        });
+    </script>
+</body>
+</html>

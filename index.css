@@ -1,0 +1,49 @@
+form {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  border: 1px solid gray;
+  background-color: rgb(228, 218, 218);
+  margin: auto;
+}
+body{
+  text-align: center;
+}
+form button {
+  margin-top: 20px;
+}
+
+#chatArea {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  height: 200px;
+  text-align: center;
+  border: 1px solid gray;
+  background-color: rgb(228, 218, 218);
+  margin: auto;
+}
+#chatArea #messageInput,#sendMessage{
+margin-top: 20px;
+}
+
+#messageTableDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  height:fit-content;
+  text-align: center;
+  border: 1px solid gray;
+  background-color: rgb(233, 231, 86);
+  margin: auto;
+}
+h1{
+
+}
